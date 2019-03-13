@@ -2,7 +2,7 @@ applications:
   - name: address-book-history
     path: ./applications/history-server/build/libs/history-server.jar
     routes:
-      - route: history-address-book-[UNIQUE_SUFFIX].[CF_DOMAIN]
+      - route: history-address-book-dp.cfapps.io
     memory: 1G
     instances: 1
     env:

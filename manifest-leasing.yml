@@ -2,7 +2,7 @@ applications:
   - name: address-book-leasing
     path: ./applications/leasing-server/build/libs/leasing-server.jar
     routes:
-      - route: leasing-address-book-[UNIQUE_SUFFIX].[CF_DOMAIN]
+      - route: leasing-address-book-dp.cfapps.io
     memory: 1G
     instances: 1
     env:
