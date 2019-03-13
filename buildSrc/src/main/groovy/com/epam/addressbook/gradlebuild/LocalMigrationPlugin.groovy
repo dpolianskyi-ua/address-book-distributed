@@ -2,6 +2,7 @@ package com.epam.addressbook.gradlebuild
 
 import org.flywaydb.gradle.FlywayExtension
 import org.flywaydb.gradle.task.FlywayCleanTask
+import org.flywaydb.gradle.task.FlywayInfoTask
 import org.flywaydb.gradle.task.FlywayMigrateTask
 import org.flywaydb.gradle.task.FlywayRepairTask
 import org.gradle.api.Plugin
@@ -28,8 +29,9 @@ class LocalMigrationPlugin implements Plugin<Project> {
     private static addDbTask(Project project, String name, String dbName) {
         def flywayExtension = buildFlywayExtension(project, dbName)
 
-        project.task("${name}Migrate", type: FlywayMigrateTask, group: "Migration") { extension = flywayExtension }
         project.task("${name}Clean", type: FlywayCleanTask, group: "Migration") { extension = flywayExtension }
+        project.task("${name}Migrate", type: FlywayMigrateTask, group: "Migration") { extension = flywayExtension }
+        project.task("${name}Info", type: FlywayInfoTask, group: "Migration") { extension = flywayExtension }
         project.task("${name}Repair", type: FlywayRepairTask, group: "Migration") { extension = flywayExtension }
     }
 

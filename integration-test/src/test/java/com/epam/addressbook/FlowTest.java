@@ -10,6 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 
@@ -58,7 +60,7 @@ public class FlowTest {
         accommodationServer.startWithDatabaseName("address_book_accommodation_test");
         historyServer.startWithDatabaseName("address_book_history_test");
         leasingServer.startWithDatabaseName("address_book_leasing_test");
-        ApplicationServer.waitOnPorts("8881", "8882", "8883", "8884");
+        ApplicationServer.waitOnPorts("8881");
         TestScenarioSupport.clearAllDatabases();
     }
 
@@ -77,15 +79,16 @@ public class FlowTest {
         response = httpClient.get(registrationServerUrl("/"));
         assertThat(response.body).isEqualTo("Hello!!!");
 
-        response = httpClient.post(registrationServerUrl("/registration"), MapBuilder.jsonMapBuilder()
+        Map<String, Object> body = MapBuilder.jsonMapBuilder()
                 .put("loginName", "login")
                 .put("loginPassword", "password")
                 .put("firstName", "Billy")
                 .put("lastName", "Milligan")
                 .put("email", "bm@example.com")
                 .put("phone", "+12345678900")
-                .build()
-        );
+                .build();
+
+        response = httpClient.post(registrationServerUrl("/registration"), body);
         long createdPersonId = findResponseId(response);
         assertThat(createdPersonId).isGreaterThan(0);
 
@@ -96,7 +99,7 @@ public class FlowTest {
         long createdAccountId = findResponseId(response);
         assertThat(createdAccountId).isGreaterThan(0);
 
-        response = httpClient.post(registrationServerUrl("/housings"), MapBuilder.jsonMapBuilder()
+        body = MapBuilder.jsonMapBuilder()
                 .put("accountId", createdAccountId)
                 .put("name", "House #1")
                 .put("addressLine1", "Address Line 1")
@@ -105,8 +108,8 @@ public class FlowTest {
                 .put("state", "ST")
                 .put("zip5", "12345")
                 .put("active", true)
-                .build()
-        );
+                .build();
+        response = httpClient.post(registrationServerUrl("/housings"), body);
         long createdHousingId = findResponseId(response);
         assertThat(createdHousingId).isGreaterThan(0);
 
@@ -117,15 +120,15 @@ public class FlowTest {
         response = httpClient.get(accommodationServerUrl("/"));
         assertThat(response.body).isEqualTo("Hello!!!");
 
+        body = MapBuilder.jsonMapBuilder()
+                .put("housingId", createdHousingId)
+                .put("personId", createdPersonId)
+                .put("singleOwned", true)
+                .put("startDate", "2018-01-01")
+                .put("endDate", "2015-10-01")
+                .build();
         response = httpClient.post(
-                accommodationServerUrl("/accommodations"), MapBuilder.jsonMapBuilder()
-                        .put("housingId", createdHousingId)
-                        .put("personId", createdPersonId)
-                        .put("singleOwned", true)
-                        .put("startDate", "2018-01-01")
-                        .put("endDate", "2015-10-01")
-                        .build()
-        );
+                accommodationServerUrl("/accommodations"), body);
 
         long createdAccommodationId = findResponseId(response);
         assertThat(createdAccommodationId).isGreaterThan(0);
@@ -137,12 +140,12 @@ public class FlowTest {
         response = httpClient.get(historyServerUrl("/"));
         assertThat(response.body).isEqualTo("Hello!!!");
 
-        response = httpClient.post(historyServerUrl("/histories"), MapBuilder.jsonMapBuilder()
+        body = MapBuilder.jsonMapBuilder()
                 .put("housingId", createdHousingId)
                 .put("name", "History Name #1")
                 .put("description", "History Description #1")
-                .build()
-        );
+                .build();
+        response = httpClient.post(historyServerUrl("/histories"), body);
         long createdHistoryId = findResponseId(response);
         assertThat(createdHistoryId).isGreaterThan(0);
 
@@ -153,13 +156,14 @@ public class FlowTest {
         response = httpClient.get(leasingServerUrl("/"));
         assertThat(response.body).isEqualTo("Hello!!!");
 
-        response = httpClient.post(leasingServerUrl("/leasings"), MapBuilder.jsonMapBuilder()
+        body = MapBuilder.jsonMapBuilder()
                 .put("housingId", createdHousingId)
                 .put("personId", createdPersonId)
                 .put("assignDate", "2018-01-01")
                 .put("months", 10)
-                .build()
-        );
+                .build();
+
+        response = httpClient.post(leasingServerUrl("/leasings"), body);
         long createdLeasingId = findResponseId(response);
         assertThat(createdLeasingId).isGreaterThan(0);
 

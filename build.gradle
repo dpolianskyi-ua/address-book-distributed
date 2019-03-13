@@ -4,6 +4,9 @@ buildscript {
     ext {
         springBootVersion = "2.0.3.RELEASE"
         springVersion = "5.1.3.RELEASE"
+        springCloudVersion = "Finchley.RELEASE"
+        springCloudServicesClientLibrariesVersion = "2.0.1.RELEASE"
+        springCloudCommonsVersion = "2.0.1.RELEASE"
         mysqlConnectorJavaVersion = "8.0.11"
         jacksonCoreVersion = "2.9.7"
         lombokVersion = "1.18.4"
@@ -58,6 +61,8 @@ clean.doFirst {
     delete "${rootDir}/applications/history-server/out"
     delete "${rootDir}/applications/leasing-server/out"
     delete "${rootDir}/applications/registration-server/out"
+    
+    delete "${rootDir}/platform/eureka-server/out"
 
     delete "${rootDir}/buildSrc/build"
     delete "${rootDir}/buildSrc/out"

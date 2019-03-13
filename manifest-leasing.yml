@@ -5,7 +5,6 @@ applications:
       - route: leasing-address-book-dp.cfapps.io
     memory: 1G
     instances: 1
-    env:
-      REGISTRATION_SERVER_ENDPOINT: http://FILL_ME_IN
     services:
       - address-book-leasing-database
+      - address-book-service-registry

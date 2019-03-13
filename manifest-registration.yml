@@ -7,3 +7,4 @@ applications:
     instances: 1
     services:
       - address-book-registration-database
+      - address-book-service-registry

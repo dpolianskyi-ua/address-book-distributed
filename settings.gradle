@@ -5,6 +5,8 @@ include "applications:history-server"
 include "applications:registration-server"
 include "applications:leasing-server"
 
+include "platform:eureka-server"
+
 include "components:account"
 include "components:accommodation"
 include "components:history"
